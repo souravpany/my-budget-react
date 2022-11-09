@@ -58,6 +58,10 @@ function App() {
   }, [entries])
 
   function addEntry(description, value, isExpense) {
+    if (description.length === 0 && value.length === 0) {
+      return;
+    }
+
     const result = entries.concat({ id: entries.length + 1, description, value, isExpense });
     setEntries(result);
     resetEntry();
