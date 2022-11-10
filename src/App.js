@@ -1,6 +1,5 @@
 import './App.css';
 import { useState, useEffect } from 'react';
-
 import { Container } from 'semantic-ui-react';
 
 // components
@@ -11,34 +10,29 @@ import DisplayBalances from './components/DisplayBalances';
 import EntryLines from './components/EntryLines';
 import ModelEdit from './components/ModelEdit';
 
+//redux hooks
+import { useSelector } from 'react-redux';
+
 function App() {
 
-  const [description, setDescription] = useState('')
-  const [value, setValue] = useState('')
-  const [isExpense, setIsExpense] = useState(true)
-  const [isOpen, setIsOpen] = useState(false);
-  const [entryId, setEntryId] = useState();
-
-  const [entries, setEntries] = useState(initialEntries);
+  const entries = useSelector((state) => state.entries);
+  const { isOpen, id } = useSelector((state) => state.modals);
 
   const [incomeTotal, setIncomeTotal] = useState(0);
   const [expenseTotal, setExpenseTotal] = useState(0);
   const [total, setTotal] = useState(0);
 
+  // pre-populate modal data
+  const [modalEntry, setModalEntry] = useState();
 
 
   useEffect(() => {
-    if (!isOpen && entryId) {
-      const index = entries.findIndex(entry => entry.id === entryId);
-      const newEntries = [...entries];
-      newEntries[index].description = description;
-      newEntries[index].value = value;
-      newEntries[index].isExpense = isExpense;
-      setEntries(newEntries);
-      resetEntry();
-    }
+
+    const index = entries.findIndex(entry => entry.id === id)
+    setModalEntry(entries[index])
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen])
+  }, [isOpen, id])
 
   useEffect(() => {
     let totalIncome = 0;
@@ -57,40 +51,6 @@ function App() {
 
   }, [entries])
 
-  function addEntry(description, value, isExpense) {
-    if (description.length === 0 && value.length === 0) {
-      return;
-    }
-
-    const result = entries.concat({ id: entries.length + 1, description, value, isExpense });
-    setEntries(result);
-    resetEntry();
-  }
-
-  function deleteEntry(id) {
-    const result = entries.filter(entry => entry.id !== id)
-    setEntries(result);
-  }
-
-  function editEntry(id) {
-    if (id) {
-      const index = entries.findIndex(entry => entry.id === id)
-      const entry = entries[index];
-      setEntryId(id)
-      setDescription(entry.description);
-      setIsExpense(entry.isExpense);
-      setValue(entry.value);
-      setIsOpen(true);
-      console.log(`Edit entry with id ${id}`);
-    }
-  }
-
-  function resetEntry() {
-    setDescription('')
-    setValue('')
-    setIsExpense(true)
-  }
-
   return (
     <div className="App">
       <Container>
@@ -102,32 +62,13 @@ function App() {
 
         <MainHeader title='History' type='h3' />
 
-        <EntryLines
-          entries={entries}
-          deleteEntry={deleteEntry}
-          editEntry={editEntry}
-        />
+        <EntryLines entries={entries} />
 
         < MainHeader title='Add new trasaction' type='h3' />
 
-        <NewEntryForm addEntry={addEntry}
-          resetEntry={resetEntry}
-          description={description}
-          value={value}
-          isExpense={isExpense}
-          setDescription={setDescription}
-          setValue={setValue}
-          setIsExpense={setIsExpense} />
+        <NewEntryForm />
 
-        <ModelEdit
-          isOpen={isOpen}
-          setIsOpen={setIsOpen}
-          description={description}
-          value={value}
-          isExpense={isExpense}
-          setDescription={setDescription}
-          setValue={setValue}
-          setIsExpense={setIsExpense} />
+        <ModelEdit isOpen={isOpen} {...modalEntry} />
 
       </Container>
     </div>
@@ -135,30 +76,3 @@ function App() {
 }
 
 export default App;
-
-var initialEntries = [
-  {
-    id: 1,
-    description: "Work income",
-    value: "1000",
-    isExpense: false
-  },
-  {
-    id: 2,
-    description: "Water bill",
-    value: "20",
-    isExpense: true
-  },
-  {
-    id: 3,
-    description: "Rent",
-    value: "300",
-    isExpense: true
-  },
-  {
-    id: 4,
-    description: "Power bill",
-    value: "50",
-    isExpense: true
-  },
-]

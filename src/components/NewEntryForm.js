@@ -5,21 +5,25 @@ import { Form } from 'semantic-ui-react';
 import ButtonSaveOrCancel from './ButtonSaveOrCancel';
 import EntryForm from './EntryForm';
 
+// custom hook
+import useEntryDetails from '../hooks/useEntryDetails';
 
-function NewEntryForm({ addEntry,
-    description,
-    value,
-    isExpense,
-    setDescription,
-    setValue,
-    setIsExpense, resetEntry }) {
 
-    function onOkButtonClick() {
-        addEntry(description, value, isExpense)
-    }
+function NewEntryForm() {
+
+    const { description,
+        value,
+        isExpense,
+        setDescription,
+        setValue,
+        setIsExpense,
+        onOkButtonClick
+    } = useEntryDetails();
 
     function onCancelButtonClick() {
-        resetEntry()
+        setDescription('')
+        setValue('')
+        setIsExpense(true)
     }
 
     return (
