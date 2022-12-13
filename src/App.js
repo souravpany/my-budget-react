@@ -11,7 +11,10 @@ import EntryLines from './components/EntryLines';
 import ModelEdit from './components/ModelEdit';
 
 //redux hooks
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+
+
+import { getAllEntries } from './redux/action/entries.actions';
 
 function App() {
 
@@ -24,6 +27,12 @@ function App() {
 
   // pre-populate modal data
   const [modalEntry, setModalEntry] = useState();
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getAllEntries())
+  }, [dispatch])
 
 
   useEffect(() => {
@@ -51,6 +60,7 @@ function App() {
 
   }, [entries])
 
+
   return (
     <div className="App">
       <Container>
@@ -64,7 +74,7 @@ function App() {
 
         <EntryLines entries={entries} />
 
-        < MainHeader title='Add new trasaction' type='h3' />
+        < MainHeader title='Add new transaction' type='h3' />
 
         <NewEntryForm />
 

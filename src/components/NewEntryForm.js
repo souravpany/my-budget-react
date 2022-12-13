@@ -37,7 +37,10 @@ function NewEntryForm() {
                 setValue={setValue}
                 setIsExpense={setIsExpense}
             />
-            <ButtonSaveOrCancel onOkButtonClick={onOkButtonClick} onCancelButtonClick={onCancelButtonClick} />
+            <ButtonSaveOrCancel
+                onOkButtonClick={onOkButtonClick}
+                onCancelButtonClick={onCancelButtonClick}
+            />
 
         </Form>
     )

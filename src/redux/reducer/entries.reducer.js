@@ -1,15 +1,24 @@
+import entriesType from '../action/entries.actions';
+
+
+
 function entriesReducer(state = initialEntries, action) {
     switch (action.type) {
-        case 'ADD_ENTRY':
+        case entriesType.POPULATE_ENTRIES:
+            return action.payload;
+        case entriesType.ADD_ENTRY:
             const newEntries = state.concat({ ...action.payload });
             return newEntries;
-        case 'REMOVE_ENTRY':
-            const removeEntries = state.filter(entry => entry.id !== action.payload.id);
+        case entriesType.REMOVE_ENTRY_RESULT:
+            const removeEntries = state.
+                filter(entry => entry.id !== action.payload.id);
             return removeEntries;
-        case 'UPDATE_ENTRY':
+        case entriesType.POPULATE_ENTRY_DETAILS:
+        case entriesType.UPDATE_ENTRY:
             const updateEntries = [...state];
-            const index = updateEntries.findIndex(entry => entry.id === action.payload.id)
-            updateEntries[index] = { ...action.payload.entry };
+            const index = updateEntries.
+                findIndex(entry => entry.id === action.payload.id)
+            updateEntries[index] = { ...updateEntries[index], ...action.payload.entry };
             return updateEntries;
         default:
             return state;
@@ -19,29 +28,4 @@ function entriesReducer(state = initialEntries, action) {
 export default entriesReducer;
 
 
-var initialEntries = [
-    {
-        id: 1,
-        description: "Work income",
-        value: "1000",
-        isExpense: false
-    },
-    {
-        id: 2,
-        description: "Water bill",
-        value: "20",
-        isExpense: true
-    },
-    {
-        id: 3,
-        description: "Rent",
-        value: "300",
-        isExpense: true
-    },
-    {
-        id: 4,
-        description: "Power bill",
-        value: "50",
-        isExpense: true
-    },
-]
+var initialEntries = []

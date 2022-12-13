@@ -9,7 +9,8 @@ function EntryLines({ entries }) {
         <Container>
             {entries.map((entry) => (
                 <EntryLine
-                    key={entry.id}{...entry}
+                    key={entry.id}
+                    {...entry}
                 />
             ))}
 
